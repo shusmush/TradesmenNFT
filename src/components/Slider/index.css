@@ -1,0 +1,13 @@
+@keyframes slide {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-1500px, 0, 0); /* The image width */
+  }
+}
+
+#items {
+  animation: slide 10s linear infinite;
+  transition: all 0.2s ease-out;
+}
