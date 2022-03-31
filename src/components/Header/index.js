@@ -37,21 +37,21 @@ export default function WithSubnavigation({ accounts, setAccounts }) {
   // window.userWalletAddress = null;
 
   async function loginWithMetaMask() {
-    if (window.ethereum.chainId !== "0x38") {
+    if (window.ethereum.chainId !== "0x4") {
       await ethereum.request({
         method: "wallet_addEthereumChain",
         params: [
           {
-            chainId: "0x38",
-            blockExplorerUrls: ["https://bscscan.com"],
-            chainName: "BINANCE SMART CHAIN",
+            chainId: "0x4",
+            blockExplorerUrls: ["https://rinkeby.etherscan.io"],
+            chainName: "Rinkeby Test Network",
             iconUrls: "",
             nativeCurrency: {
-              name: "BINANCE",
-              symbol: "BNB",
+              name: "Rinkerby Test Network",
+              symbol: "ETH",
               decimals: 18,
             },
-            rpcUrls: ["https://bsc-dataseed.binance.org/"],
+            rpcUrls: ["https://rinkeby.infura.io/v3/"],
           },
         ],
       });

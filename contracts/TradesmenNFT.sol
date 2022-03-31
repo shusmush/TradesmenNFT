@@ -19,7 +19,7 @@ contract TradesmenNFT is ERC721, Ownable {
     // mapping(address => uint256) public walletMints;
 
     constructor() payable ERC721("TradesmenNFT", "TMN")  {
-        mintPrice = 0.2 ether;
+        mintPrice = 0.01 ether;
         totalSupply = 0;
         maxSupply = 10000;
         maxMintAmount = maxSupply - totalSupply;
@@ -30,7 +30,7 @@ contract TradesmenNFT is ERC721, Ownable {
     // public
     function mint(address _to, uint256 _mintAmount) public payable {
         
-        require(!isPiblicMintEnabled, "Public minting not enabled");
+        require(isPiblicMintEnabled, "Public minting not enabled");
         require(_mintAmount > 0, "mint amount must be greater than 0");
         require(_mintAmount <= maxMintAmount, "Mint amount exceeds current available supply");
         require(totalSupply + _mintAmount <= maxSupply, "max supply reached");
@@ -39,7 +39,7 @@ contract TradesmenNFT is ERC721, Ownable {
 
         if (msg.sender != owner()) {
             //general public
-            require(msg.value >= mintPrice * _mintAmount, "Not enough ether to mint");
+            require(msg.value == mintPrice * _mintAmount, "Not enough ether to mint");
         }
 
         for (uint256 i = 1; i <= _mintAmount; i++) {
@@ -75,12 +75,6 @@ contract TradesmenNFT is ERC721, Ownable {
     }
 
     //only owner
-
-
-    function transferContract(address newOwner) public onlyOwner{
-        require(newOwner != address(0), "Owner cannot be 0x0");
-        transferOwnership(newOwner);
-    }
 
     function setMintPrice(uint256 _newMintPrice) public onlyOwner {
         mintPrice = _newMintPrice;
