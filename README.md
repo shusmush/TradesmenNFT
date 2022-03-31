@@ -10,11 +10,16 @@ npx hardhat compile
 npx hardhat clean
 npx hardhat test
 npx hardhat node
-node scripts/sample-script.js
+node scripts/deployTradesmenNFT.js
 npx hardhat help
 ```
-
-Accounts for client to open:
+```shell
+# Accounts for client to open:
 
 infura.io account to generate RPC API id
 etherscan.io Api key
+add wallet private key to hardhat config.
+
+```
+
+<!-- 0x5a39039dec4Fc65B7B3EDF12e8De0Cb14c31dEb8 smart contract address -->
