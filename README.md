@@ -13,3 +13,8 @@ npx hardhat node
 node scripts/sample-script.js
 npx hardhat help
 ```
+
+Accounts for client to open:
+
+infura.io account to generate RPC API id
+etherscan.io Api key
