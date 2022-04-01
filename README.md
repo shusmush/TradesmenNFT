@@ -14,5 +14,9 @@ node scripts/sample-script.js
 npx hardhat help
 ```
 ```shell
-new contract addrress 0x247fAa464Cc160e90544C1bF868824A664FfD7Af
+new contract addrress rinkeby /test network
+0x247fAa464Cc160e90544C1bF868824A664FfD7Af
+
+website testlink 
+tradesmennft.netlify.app
 ```
