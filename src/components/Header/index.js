@@ -38,23 +38,38 @@ export default function WithSubnavigation({ accounts, setAccounts }) {
 
   async function loginWithMetaMask() {
     if (window.ethereum.chainId !== "0x4") {
-      await ethereum.request({
-        method: "wallet_addEthereumChain",
-        params: [
-          {
-            chainId: "0x4",
-            blockExplorerUrls: ["https://rinkeby.etherscan.io"],
-            chainName: "Rinkeby Test Network",
-            iconUrls: "",
-            nativeCurrency: {
-              name: "Rinkerby Test Network",
-              symbol: "ETH",
-              decimals: 18,
-            },
-            rpcUrls: ["https://rinkeby.infura.io/v3/"],
-          },
-        ],
-      });
+      try {
+        await ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: "0x4" }],
+        });
+      } catch (switchError) {
+        // This error code indicates that the chain has not been added to MetaMask.
+        if (switchError.code === 4902) {
+          try {
+            await ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [
+                {
+                  chainId: "0x4",
+                  blockExplorerUrls: ["https://rinkeby.etherscan.io"],
+                  chainName: "Rinkeby Test Network",
+                  iconUrls: "",
+                  nativeCurrency: {
+                    name: "Rinkerby Test Network",
+                    symbol: "ETH",
+                    decimals: 18,
+                  },
+                  rpcUrls: ["https://rinkeby.infura.io/v3/"],
+                },
+              ],
+            });
+          } catch (addError) {
+            // handle "add" error
+          }
+        }
+        // handle other "switch" errors
+      }
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -77,7 +92,7 @@ export default function WithSubnavigation({ accounts, setAccounts }) {
   };
 
   return (
-    <Box pos="absolute" top={0} left={0} w="100%">
+    <Box pos="absolute" top={0} left={0} w="100%" zIndex="1">
       <Flex
         bg={"transparent"}
         color={useColorModeValue("gray.600", "white")}
@@ -245,24 +260,39 @@ const MobileNav = ({ accounts, setAccounts }) => {
   // window.userWalletAddress = null;
 
   async function loginWithMetaMask() {
-    if (window.ethereum.chainId !== "0x38") {
-      await ethereum.request({
-        method: "wallet_addEthereumChain",
-        params: [
-          {
-            chainId: "0x38",
-            blockExplorerUrls: ["https://bscscan.com"],
-            chainName: "BINANCE SMART CHAIN",
-            iconUrls: "",
-            nativeCurrency: {
-              name: "BINANCE",
-              symbol: "BNB",
-              decimals: 18,
-            },
-            rpcUrls: ["https://bsc-dataseed.binance.org/"],
-          },
-        ],
-      });
+    if (window.ethereum.chainId !== "0x4") {
+      try {
+        await ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: "0x4" }],
+        });
+      } catch (switchError) {
+        // This error code indicates that the chain has not been added to MetaMask.
+        if (switchError.code === 4902) {
+          try {
+            await ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [
+                {
+                  chainId: "0x4",
+                  blockExplorerUrls: ["https://rinkeby.etherscan.io"],
+                  chainName: "Rinkeby Test Network",
+                  iconUrls: "",
+                  nativeCurrency: {
+                    name: "Rinkerby Test Network",
+                    symbol: "ETH",
+                    decimals: 18,
+                  },
+                  rpcUrls: ["https://rinkeby.infura.io/v3/"],
+                },
+              ],
+            });
+          } catch (addError) {
+            // handle "add" error
+          }
+        }
+        // handle other "switch" errors
+      }
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });

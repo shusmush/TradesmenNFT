@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  const TradesmenNFT = await hre.ethers.getContractFactory("Greeter");
+  const TradesmenNFT = await hre.ethers.getContractFactory("TradesmenNFT");
   const tradesmenNFT = await TradesmenNFT.deploy();
 
   await tradesmenNFT.deployed();

@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { ethers, BigNumber } from "ethers";
+import TradesmenNFT from "../../TradesmenNFT.json";
 
 import {
   Image,
@@ -11,7 +13,6 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
-import { ethers, BigNumber } from "ethers";
 
 import Countdown from "../Countdown";
 
@@ -83,12 +84,75 @@ export default function index({ accounts }) {
   );
 }
 
+const tradesmenNFTAddress = "0x247fAa464Cc160e90544C1bF868824A664FfD7Af";
+
 const MintContainer = ({ accounts }) => {
   const [mintAmount, setMintAmount] = useState(1);
+  const [totalSupply, setTotalSupply] = useState("");
+  const [maxSupply, setMaxSupply] = useState("");
   const isConnected = Boolean(accounts[0]);
+  const currentAccount = accounts ? accounts[0] : "";
+
+  useEffect(async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(
+      tradesmenNFTAddress,
+      TradesmenNFT.abi,
+      signer
+    );
+    const totalSupply = await contract.totalSupply();
+    const maxSupply = await contract.maxSupply();
+
+    setTotalSupply(
+      String(
+        Math.round(parseFloat(ethers.utils.formatEther(totalSupply) * 10 ** 18))
+      )
+    );
+    setMaxSupply(
+      String(
+        Math.round(parseFloat(ethers.utils.formatEther(maxSupply) * 10 ** 18))
+      )
+    );
+  }, []);
+
+  async function handleMint() {
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(
+        tradesmenNFTAddress,
+        TradesmenNFT.abi,
+        signer
+      );
+
+      try {
+        const response = await contract.mint(
+          currentAccount,
+          BigNumber.from(mintAmount),
+          {
+            value: ethers.utils.parseEther((0.01 * mintAmount).toString()),
+          }
+        );
+        const afterResponse = await response.wait();
+        console.log(response, afterResponse);
+      } catch (error) {
+        console.log(error);
+        // console.log(error.reason);
+        // console.log(error.address);
+        // console.log(error.args);
+        // console.log(error.method);
+        // console.log(error.errorSignature);
+        // console.log(error.errorArgs);
+        // console.log(error.transaction);
+      }
+    }
+  }
 
   const handleIncrement = () => {
     setMintAmount(mintAmount + 1);
+    console.log(currentAccount);
+    console.log(accounts);
   };
   const handleDecrement = () => {
     if (mintAmount <= 1) {
@@ -107,7 +171,7 @@ const MintContainer = ({ accounts }) => {
       {isConnected ? (
         <VStack spacing="10" align="center" justify="center">
           <Text color="#fb6087" fontSize="2xl" fontWeight="bold">
-            1200 / 10000
+            {totalSupply} / {maxSupply}
           </Text>
           <HStack spacing={3}>
             <Box
@@ -176,6 +240,7 @@ const MintContainer = ({ accounts }) => {
             fontSize="lg"
             px={{ base: 6, md: 8 }}
             py={{ base: 3, md: 4 }}
+            onClick={handleMint}
           >
             MINT
           </Box>
@@ -188,7 +253,7 @@ const MintContainer = ({ accounts }) => {
             fontWeight="bold"
             textAlign="center"
           >
-            1200 / 10000 NFTs <br />
+            {totalSupply}/ {maxSupply} NFTs <br />
             Minted
           </Text>
           <Text color="#fb6087" fontSize="xl" fontWeight="">

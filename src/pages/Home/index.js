@@ -8,8 +8,8 @@ import Vision from "../../components/Vision";
 import Roadmap from "../../components/Roadmap";
 import Footer from "../../components/Footer";
 
-const index = () => {
-  const [accounts, setAccounts] = useState([]);
+const index = ({ accounts, setAccounts }) => {
+  // const [accounts, setAccounts] = useState([]);
 
   return (
     <Box
@@ -21,7 +21,7 @@ const index = () => {
       position="relative"
       overflow="hidden"
     >
-      <Header accounts={accounts} setAccounts={setAccounts} />
+      {/* <Header accounts={accounts} setAccounts={setAccounts} /> */}
       <Hero accounts={accounts} />
       <About />
       <Slider />
